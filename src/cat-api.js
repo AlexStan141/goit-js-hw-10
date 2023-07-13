@@ -6,17 +6,20 @@ axios.defaults.headers.common['x-api-key'] =
 function fetchBreeds() {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://api.thecatapi.com/v1/breeds")
-      .then((response) => resolve(response))
-      .catch((error) => reject(error));
+      .get('https://api.thecatapi.com/v1/breeds')
+      .then(response => resolve(response))
+      .catch(error => reject(error));
   });
-}function fetchCatByBreed(breedId) {
-  console.log(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`);
+}
+function fetchCatByBreed(breedId) {
+  console.log(
+    `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`
+  );
   return new Promise((resolve, reject) => {
     axios
       .get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`)
-      .then((response) => resolve(response))
-      .catch((error) => reject(error));
+      .then(response => resolve(response))
+      .catch(error => reject(error));
   });
 }
 
