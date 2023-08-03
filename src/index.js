@@ -1,12 +1,12 @@
 import { fetchBreeds, fetchCatByBreed, findCat } from './cat-api';
+import Notiflix from 'notiflix';
+import SlimSelect from 'slim-select';
 
-var select = document.querySelector('.breed-select');
-var error = document.querySelector('.error');
+var select = document.getElementsByTagName('select')[0];
 var info = document.querySelector('.cat-info');
 var loader = document.querySelector('.loader');
 
 select.style.visibility = 'hidden';
-error.style.visibility = 'hidden';
 info.style.visibility = 'hidden';
 
 fetchBreeds()
@@ -14,21 +14,24 @@ fetchBreeds()
     return res.json();
   })
   .then(data => {
-    error.style.visibility = 'hidden';
     loader.style.visibility = 'hidden';
     if (!data.message) {
       for (let breed of data) {
         select.innerHTML += `<option value=${breed.id}>${breed.name}</option>`;
       }
       select.style.visibility = 'visible';
+      new SlimSelect({
+        select: select,
+      });
     } else {
-      error.style.visibility = 'visible';
+      Notiflix.Notify.failure(
+        'Oops! Something went wrong! Try reloading the page!'
+      );
     }
   });
 
 select.addEventListener('change', () => {
   var catImageSrc;
-  error.style.visibility = 'hidden';
   loader.style.visibility = 'visible';
   info.innerHTML = '';
   fetchCatByBreed(select.value)
@@ -38,7 +41,9 @@ select.addEventListener('change', () => {
     .then(data => {
       loader.style.visibility = 'hidden';
       if (data.length == 0) {
-        error.style.visibility = 'visible';
+        Notiflix.Notify.failure(
+          'Oops! Something went wrong! Try reloading the page!'
+        );
       } else {
         catImageSrc = data[0].url;
         findCat(select.value).then(res2 => {
